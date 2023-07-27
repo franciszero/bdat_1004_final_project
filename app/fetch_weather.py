@@ -23,11 +23,11 @@ def fetch_weather():
         b = time.strptime(a, '%Y-%m-%d %H:%M')
         date = time.strftime('%Y-%m-%d', b)
 
-    # block duplicate data committing
-    existing_record = WeatherData.query.filter_by(city=city, date=date)
-    if existing_record.count() == 0:  # if no today temperature
-        print("fetch weather_reports: %s %s %.1f" % (city, date, temperature))
-        record = WeatherData(city=city, date=date, temperature=temperature)
-        db.session.add(record)  # add a new record for today's weather
-        db.session.commit()
+        # block duplicate data committing
+        existing_record = WeatherData.query.filter_by(city=city, date=date)
+        if existing_record.count() == 0:  # if no today temperature
+            print("fetch weather_reports: %s %s %.1f" % (city, date, temperature))
+            record = WeatherData(city=city, date=date, temperature=temperature)
+            db.session.add(record)  # add a new record for today's weather
+            db.session.commit()
 
