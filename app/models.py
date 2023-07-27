@@ -52,7 +52,7 @@ def store_weather_data():
     today = datetime.today().date()
 
     for city in cities:
-        for i in range(1, 10):
+        for i in range(1, 10):  # fake history city temperature
             date = today - timedelta(days=i)
             temperature = random.randint(-10, 30)
 
