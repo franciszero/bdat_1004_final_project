@@ -5,7 +5,11 @@ from app import db
 import time
 
 url = "https://weatherapi-com.p.rapidapi.com/current.json"
-params = {"q": "44.389355,-79.690331"}
+param1 = {"q": "44.389355,-79.690331"}
+param2 = {"q": "44.389355,-79.690331"}
+param3 = {"q": "44.389355,-79.690331"}
+
+params = [param1, param2, param3]
 headers = {
     "X-RapidAPI-Key": "062977c2b0msh1d566ef2fe25d47p11b9cajsnd30579cb0c74",
     "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
@@ -13,9 +17,9 @@ headers = {
 
 
 def fetch_weather():
-    cities = ['Toronto', 'Seattle']
-    for city in cities:
-        response = requests.get(url, headers=headers, params=params)
+    # cities = ['Toronto', 'Seattle']
+    for param in params:
+        response = requests.get(url, headers=headers, params=param)
         data = response.json()
         city = data['location']['name']
         temperature = data['current']['temp_c']
