@@ -6,12 +6,6 @@ import time
 
 url = "https://weatherapi-com.p.rapidapi.com/current.json"
 params = {"q": "44.389355,-79.690331"}
-# url = "https://weatherapi-com.p.rapidapi.com/history.json"
-# params = {
-#     "q": 'Barrie',
-#     "dt": '2023-7-15',
-#     "lang": 'en'
-#   }
 headers = {
     "X-RapidAPI-Key": "062977c2b0msh1d566ef2fe25d47p11b9cajsnd30579cb0c74",
     "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
@@ -36,11 +30,11 @@ def fetch_weather():
     b = time.strptime(a, '%Y-%m-%d %H:%M')
     date = time.strftime('%Y-%m-%d', b)
 
-    # block duplicate
+    # block duplicate data committing
     existing_record = WeatherData.query.filter_by(city=city, date=date)
-    if existing_record.first() is None:
+    if existing_record.count() == 0:  # if no today temperature
         print("fetch weather_reports: %s %s %.1f" % (city, date, temperature))
         record = WeatherData(city=city, date=date, temperature=temperature)
-        db.session.add(record)
+        db.session.add(record)  # add a new record for today's weather
         db.session.commit()
 
