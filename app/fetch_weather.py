@@ -5,7 +5,13 @@ from app import db
 import time
 
 url = "https://weatherapi-com.p.rapidapi.com/current.json"
-querystring = {"q": "44.389355,-79.690331"}
+params = {"q": "44.389355,-79.690331"}
+# url = "https://weatherapi-com.p.rapidapi.com/history.json"
+# params = {
+#     "q": 'Barrie',
+#     "dt": '2023-7-15',
+#     "lang": 'en'
+#   }
 headers = {
     "X-RapidAPI-Key": "062977c2b0msh1d566ef2fe25d47p11b9cajsnd30579cb0c74",
     "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
@@ -22,7 +28,7 @@ def fetch_weather():
     #     #     db.session.add(record)
     #     # db.session.commit()
 
-    response = requests.get(url, headers=headers, params=querystring)
+    response = requests.get(url, headers=headers, params=params)
     data = response.json()
     city = data['location']['name']
     temperature = data['current']['temp_c']

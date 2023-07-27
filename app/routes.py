@@ -1,12 +1,15 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
 from app.models import WeatherData
-import json
+from flask import request
+from sqlalchemy import desc
 
 main = Blueprint('main', __name__)
 
-@main.route('/')
+@main.route('/', methods=['GET'])
 def index():
-    data = WeatherData.query.all()
-    jstr = [ob.serialize for ob in data]
-    html = render_template('index.html', weather_data=jstr)
+    city = request.args.get('city', default=None, type=str)
+    if city is None:
+        city = "Barrie"
+    weather_data = WeatherData.query.filter_by(city=city).order_by(desc(WeatherData.date))
+    html = render_template('index.html', weather_data=weather_data)
     return html

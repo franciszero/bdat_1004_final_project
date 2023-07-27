@@ -47,27 +47,20 @@ class WeatherData(db.Model):
 #         return '<City {} on Date {}>'.format(self.city, self.date)
 
 
-def get_weather_data():
-    cities = ['Toronto', 'Seattle']
+def store_weather_data():
+    cities = ['Barrie', 'Toronto']
     today = datetime.today().date()
-    weather_data = []
 
     for city in cities:
-        for i in range(10):
+        for i in range(1, 10):
             date = today - timedelta(days=i)
             temperature = random.randint(-10, 30)
-            weather_data.append({'city': city, 'date': date, 'temperature': temperature})
 
-    return weather_data
-
-
-def store_weather_data():
-    weather_data = get_weather_data()
-
-    for data in weather_data:
-        weather = WeatherData(city=data['city'], date=data['date'], temperature=data['temperature'])
-        db.session.add(weather)
-
+            existing_record = WeatherData.query.filter_by(city=city, date=date)
+            if existing_record.first() is None:
+                print("fetch weather_reports: %s %s %.1f" % (city, date, temperature))
+                record = WeatherData(city=city, date=date, temperature=temperature)
+                db.session.add(record)
     db.session.commit()
 
 

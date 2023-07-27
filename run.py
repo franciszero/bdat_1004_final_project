@@ -9,13 +9,9 @@ is_debug = False
 with app.app_context():
     db.create_all()
 
-    print("Debug mode: %s" % is_debug)
-    if is_debug:
-        store_weather_data()
-    else:
-        fetch_weather()
+    store_weather_data()
+    fetch_weather()
 
-    # 最后，我们可以获取并打印一些数据以检查它们是否正确地存储在了数据库中
     print(get_city_weather('Barrie'))
 
 if __name__ == '__main__':
