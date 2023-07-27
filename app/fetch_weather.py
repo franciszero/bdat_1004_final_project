@@ -13,22 +13,15 @@ headers = {
 
 
 def fetch_weather():
-    # cities = ['Toronto', 'Seattle']
-    # for city in cities:
-    #     # response = requests.get(f'https://api.weather.gov/gridpoints/{city}/10,10/forecast')
-    #     # data = json.loads(response.text)
-    #     # for forecast in data['current']['temp_c'][:10]:
-    #     #     record = WeatherData(city=city, date=forecast['startTime'][:10], temperature=forecast['temperature'])
-    #     #     db.session.add(record)
-    #     # db.session.commit()
-
-    response = requests.get(url, headers=headers, params=params)
-    data = response.json()
-    city = data['location']['name']
-    temperature = data['current']['temp_c']
-    a = data['location']['localtime']
-    b = time.strptime(a, '%Y-%m-%d %H:%M')
-    date = time.strftime('%Y-%m-%d', b)
+    cities = ['Toronto', 'Seattle']
+    for city in cities:
+        response = requests.get(url, headers=headers, params=params)
+        data = response.json()
+        city = data['location']['name']
+        temperature = data['current']['temp_c']
+        a = data['location']['localtime']
+        b = time.strptime(a, '%Y-%m-%d %H:%M')
+        date = time.strftime('%Y-%m-%d', b)
 
     # block duplicate data committing
     existing_record = WeatherData.query.filter_by(city=city, date=date)
