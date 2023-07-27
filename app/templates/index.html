@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+</head>
+<body>
+<h1>Weather Data</h1>
+<table>
+    <tr>
+        <th>City</th>
+        <th>Date</th>
+        <th>Temperature</th>
+    </tr>
+    {% for record in weather_data %}
+    <tr>
+        <td>{{ record.city }}</td>
+        <td>{{ record.date }}</td>
+        <td>{{ record.temperature }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<div id="chart"></div>
+<script>
+    var data = {{ weather_data|tojson }};
+    drawChart(data);
+</script>
+</body>
+</html>
