@@ -5,7 +5,7 @@ from sqlalchemy import desc
 
 main = Blueprint('main', __name__)
 
-@main.route('/', methods=['GET'])  # e.g.: http://website.com/?city=Barrie
+@main.route('/', methods=['GET'])  # e.g.: http://localhost:5001/?city=Barrie
 def index():
     city = request.args.get('city', default=None, type=str)
     if city is None:

@@ -25,31 +25,18 @@ def fetch_weather_for_all_locations():
         fetch_weather(location)
 
 def fetch_weather(location):
-    try:
-        response = requests.get(url, headers=headers, params=location)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-        data = response.json()
-        city = data['location']['name']
-        temperature = data['current']['temp_c']
-        a = data['location']['localtime']
-        b = time.strptime(a, '%Y-%m-%d %H:%M')
-        date = time.strftime('%Y-%m-%d', b)
+    response = requests.get(url, headers=headers, params=location)
+    data = response.json()
+    city = data['location']['name']
+    temperature = data['current']['temp_c']
+    a = data['location']['localtime']
+    b = time.strptime(a, '%Y-%m-%d %H:%M')
+    date = time.strftime('%Y-%m-%d', b)
 
-        # Create a unique identifier based on the city, date, and coordinates
-        # unique_id = f"{city}-{date}-{coordinates}"
-
-        # Check if the record already exists in the database based on the unique identifier
-        existing_record = WeatherData.query.filter_by(city=city, date=date)
-
-        if existing_record.count() == ():
-            print(f"Fetch weather report: {city}, {date}, {temperature}°C")
-            # Assuming you have a 'unique_id' field in the WeatherData model
-            record = WeatherData(city=city, date=date, temperature=temperature)
-            db.session.add(record)  # add a new record for today's weather
-            db.session.commit()
-        else:
-            print(f"Data already exists for {city}, {date}, {location}")
-    except requests.exceptions.RequestException as e:
-        print(f"Failed to get weather data: {e}")
-
-    # Assuming you call the function fetch_weather() from another part of your application
+    # block duplicate data committing
+    existing_record = WeatherData.query.filter_by(city=city, date=date)
+    if existing_record.count() == 0:  # if no today temperature
+        print("fetch weather_reports: %s %s %.1f" % (city, date, temperature))
+        record = WeatherData(city=city, date=date, temperature=temperature)
+        db.session.add(record)  # add a new record for today's weather
+        db.session.commit()
