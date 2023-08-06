@@ -53,8 +53,7 @@
     </div>
 
 <!--    <div id="curve_chart" style="width: 900px; height: 500px" class="mx-auto"></div>-->
-    <div id="curve_chart" style="width: 80%; height: 400px" class="mx-auto"></div>
-
+    <div id="curve_chart" style="width: 40%; height: 400px" class="mx-auto"></div>
 
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
@@ -74,7 +73,19 @@
             var options = {
                 title: 'City Temperature',
                 curveType: 'function',
-                legend: { position: 'bottom' }
+                legend: { position: 'bottom' },
+                hAxis: {
+                    slantedText: true,
+                    slantedTextAngle: 25,  // Increase this value to make labels more vertical
+                    textStyle: {
+                        fontSize: 12  // Make font slightly smaller
+                    }
+                },
+                chartArea: {
+                    height: '70%',
+                    width: '90%'
+                },
+                height: 400
             };
 
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
