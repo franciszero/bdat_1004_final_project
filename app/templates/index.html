@@ -7,6 +7,14 @@
 <div id="curve_chart" style="width: 900px; height: 500px"></div>
 <body>
     <h1>Weather Data</h1>
+    <form method="post">
+        <label for="city">Choose a city:</label>
+        <select name="city" id="city" onchange="this.form.submit()">
+            {% for city in city_list %}
+            <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+            {% endfor %}
+        </select>
+    </form>
     <table>
         <tr>
             <th>City</th>
