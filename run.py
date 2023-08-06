@@ -39,4 +39,4 @@ if __name__ == '__main__':
     scheduler_thread = Thread(target=run_scheduler, args=(app,))
     scheduler_thread.start()
 
-    app.run(debug=False, host='0.0.0.0', port=5001)
+    app.run(debug=False, host='0.0.0.0', port=5002)

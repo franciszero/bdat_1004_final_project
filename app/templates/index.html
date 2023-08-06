@@ -78,7 +78,7 @@
 </head>
 <body>
     <header>
-        <h1>Website Name</h1>
+        <h1>Weather Report - Final Group Project 2</h1>
     </header>
     <nav>
         <a href="#">Home</a>
@@ -94,13 +94,12 @@
                 {% endfor %}
             </select>
             <button id="getWeatherButton">Get Weather</button>
-            <h2>Featured Content</h2>
-            <p>Weather for today:</p>
+            <p>History weather for target city:</p>
         </div>
+        <div id="curve_chart" style="width: 40%; height: 400px" class="mx-auto"></div>
         <div id="weatherInfo">
             {% include 'weather_data.html' %}
         </div>
-        <div id="curve_chart" style="width: 40%; height: 400px" class="mx-auto"></div>
     </main>
     <footer>
         <p>&copy; 2023 Weather. All rights reserved.</p>
