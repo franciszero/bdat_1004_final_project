@@ -20,9 +20,12 @@ params = [
     {"q": "44.6488,-63.5752"}       # Halifax
 ]
 
+
 def fetch_weather_for_all_locations():
+    print("Scheduled task fetch_weather_for_all_locations executed at:", time.strftime("%Y-%m-%d %H:%M:%S"))
     for location in params:
         fetch_weather(location)
+
 
 def fetch_weather(location):
     response = requests.get(url, headers=headers, params=location)
