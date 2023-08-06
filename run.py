@@ -27,7 +27,7 @@ def my_task():
 
 def run_scheduler(a_p_p):
     with a_p_p.app_context():
-        schedule.every(5).seconds.do(fetch_weather_for_all_locations)  # Fetch weather data every 5 seconds for testing
+        schedule.every(4).hours.do(fetch_weather_for_all_locations)  # Fetch weather data every 5 seconds for testing
 
         while True:
             schedule.run_pending()
