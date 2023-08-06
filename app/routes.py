@@ -13,12 +13,12 @@ def index():
         city = "Barrie"
 
     # Query all cities from database
-    all_cities = WeatherData.query.with_entities(WeatherData.city).distinct()
+    all_cities = WeatherData.query.with_entities(WeatherData.city).distinct().all()
     cities = [c.city for c in all_cities]
 
     # read data from database
-    weather_data = WeatherData.query.filter_by(city=city).order_by(desc(WeatherData.date))
+    weather_data = WeatherData.query.filter_by(city=city).order_by(desc(WeatherData.date)).all()
 
     # return an HTML page to web browser
-    html = render_template('index.html', weather_data=weather_data, cities=cities)
+    html = render_template('index.html', weather_data=weather_data, cities=cities, city=city)
     return html
