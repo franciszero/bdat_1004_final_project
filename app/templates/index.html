@@ -117,16 +117,9 @@
     <script>
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Date');
-            data.addColumn('number', 'Temperature');
-            data.addRows([
-                {% for weather in weather_data %}
-                    ['{{ weather.date }}', {{ weather.temperature }}],
-                {% endfor %}
-            ]);
-            var options = {
+
+        function getChartOptions() {
+            return {
                 title: 'City Temperature',
                 curveType: 'function',
                 legend: { position: 'bottom' },
@@ -143,20 +136,30 @@
                 },
                 height: 400
             };
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, options);
         }
+
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'Temperature');
+            data.addRows([
+                {% for weather in weather_data %}
+                    ['{{ weather.date }}', {{ weather.temperature }}],
+                {% endfor %}
+            ]);
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            chart.draw(data, getChartOptions());  // 使用getChartOptions()
+        }
+
         function updateChart(weatherData) {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Date');
             data.addColumn('number', 'Temperature');
             data.addRows(weatherData);
-            var options = {
-                //... (rest of your options code)
-            };
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, options);
+            chart.draw(data, getChartOptions());  // 使用getChartOptions()
         }
+
         document.getElementById('getWeatherButton').addEventListener('click', () => {
             // If there's a value in the input box, use it. Otherwise, use the selected value from the drop-down list.
             const cityInputValue = document.getElementById('cityInput').value;
@@ -186,6 +189,7 @@
                     weatherInfoDiv.innerHTML = '<p>Failed to fetch weather data. Please try again later.</p>';
                 });
         });
+
         document.getElementById('citySelect').addEventListener('change', () => {
             // When the selected city changes, trigger the click event on the button to fetch new weather data
             document.getElementById('getWeatherButton').click();
