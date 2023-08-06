@@ -13,18 +13,15 @@ def index():
     if city is None:
         city = "Barrie"
 
-    # Query all cities from database
-    all_cities = WeatherData.query.with_entities(WeatherData.city).distinct().all()
-    cities = [c.city for c in all_cities]
+    all_cities = ["select city"] + [c.city for c in WeatherData.query.with_entities(WeatherData.city).distinct().all()]
 
     # read data from database
-    # weather_data = WeatherData.query.filter_by(city=city).order_by(desc(WeatherData.date)).all()
     days_ago_14 = datetime.now() - timedelta(days=14)
     weather_data = WeatherData.query.filter_by(city=city).filter(WeatherData.date >= days_ago_14).order_by(
         asc(WeatherData.date)).all()
 
     # return an HTML page to web browser
-    html = render_template('index.html', weather_data=weather_data, cities=cities, city=city)
+    html = render_template('index.html', weather_data=weather_data, cities=all_cities, city=city)
     return html
 
 
@@ -41,12 +38,13 @@ def get_weather_data():
         .filter(WeatherData.date >= days_ago_14)\
         .order_by(asc(WeatherData.date))\
         .all()
+    exists_in_db = len(weather_data) > 0
 
-    # Here, I'm assuming you have a separate HTML template to display just the weather data
     html = render_template('weather_data.html', weather_data=weather_data)
     chart_data = [{'date': w.date.strftime('%Y-%m-%d'), 'temperature': w.temperature} for w in weather_data]
 
     return jsonify({
         'html': html,
-        'chartData': chart_data
+        'chartData': chart_data,
+        'existsInDb': exists_in_db
     })

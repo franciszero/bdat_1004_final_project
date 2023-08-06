@@ -37,16 +37,6 @@ class WeatherData(db.Model):
         })
 
 
-# class CityWeather(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     city = db.Column(db.String(50), nullable=False)
-#     date = db.Column(db.Date, nullable=False)
-#     temperature = db.Column(db.Float, nullable=False)
-#
-#     def __repr__(self):
-#         return '<City {} on Date {}>'.format(self.city, self.date)
-
-
 def store_weather_data():
     cities = ['Barrie', 'Toronto']
     today = datetime.today().date()

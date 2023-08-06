@@ -35,7 +35,6 @@ def fetch_weather(location):
     temperature = data['current']['temp_c']
     a = data['location']['localtime']
     date = datetime.strptime(a, '%Y-%m-%d %H:%M').date()
-    # date = time.strftime('%Y-%m-%d', b)
 
     # block duplicate data committing
     existing_record = WeatherData.query.filter_by(city=city, date=date)

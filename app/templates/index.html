@@ -3,7 +3,6 @@
 <head>
     <title>Weather Page</title>
     <style>
-        /* Your new template styles */
         body {
             font-family: Helvetica;
             font-style: bold;
@@ -67,8 +66,6 @@
         #citySelect::-webkit-appearance {
             display: none;
         }
-
-        /* Your previous styles */
         table {
             font-size: 0.8rem;
         }
@@ -76,7 +73,6 @@
             line-height: 1.2;
         }
     </style>
-    <!-- Your previous header links -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
@@ -91,29 +87,24 @@
     </nav>
     <main>
         <div>
-            <!-- Combined input and drop-down menu within the button -->
-            <button id="getWeatherButton">
-                <input type="text" id="cityInput" placeholder="Enter city name">
-                <select id="citySelect">
-                    {% for city_name in cities %}
-                        <option value="{{ city_name }}" {% if city_name == city %}selected{% endif %}>{{ city_name }}</option>
-                    {% endfor %}
-                </select>
-                Get Weather
-            </button>
+            <input type="text" id="cityInput" placeholder="Enter city name">
+            <select id="citySelect">
+                {% for city_name in cities %}
+                    <option value="{{ city_name }}" {% if city_name == city %}selected{% endif %}>{{ city_name }}</option>
+                {% endfor %}
+            </select>
+            <button id="getWeatherButton">Get Weather</button>
             <h2>Featured Content</h2>
             <p>Weather for today:</p>
         </div>
         <div id="weatherInfo">
             {% include 'weather_data.html' %}
         </div>
-        <!-- Your previous chart div -->
         <div id="curve_chart" style="width: 40%; height: 400px" class="mx-auto"></div>
     </main>
     <footer>
         <p>&copy; 2023 Weather. All rights reserved.</p>
     </footer>
-    <!-- Your previous JavaScript and the new template's script -->
     <script>
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
@@ -148,7 +139,7 @@
                 {% endfor %}
             ]);
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, getChartOptions());  // 使用getChartOptions()
+            chart.draw(data, getChartOptions());
         }
 
         function updateChart(weatherData) {
@@ -157,31 +148,64 @@
             data.addColumn('number', 'Temperature');
             data.addRows(weatherData);
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, getChartOptions());  // 使用getChartOptions()
+            chart.draw(data, getChartOptions());
+        }
+
+        function updateDropdownCity(cityName) {
+            const citySelect = document.getElementById('citySelect');
+            let foundCity = false;
+            for(let i = 0; i < citySelect.options.length; i++) {
+                if(citySelect.options[i].value === cityName) {
+                    citySelect.selectedIndex = i;
+                    foundCity = true;
+                    break;
+                }
+            }
+
+            if(!foundCity) {
+                for(let i = 0; i < citySelect.options.length; i++) {
+                    if(citySelect.options[i].value === "select city") {
+                        citySelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
         }
 
         document.getElementById('getWeatherButton').addEventListener('click', () => {
-            // If there's a value in the input box, use it. Otherwise, use the selected value from the drop-down list.
+            // If there's a value in the input box, use it.
+            // Otherwise, use the selected value from the drop-down list.
             const cityInputValue = document.getElementById('cityInput').value;
             const citySelectValue = document.getElementById('citySelect').value;
             const city = cityInputValue ? cityInputValue : citySelectValue;
 
-            // Fetch weather data from your backend API
+            // Fetch weather data from backend API
             fetch(`/get_weather_data?city=${city}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch weather data');
                     }
-                    return response.json();  // Get JSON instead of text
+                    return response.json();
                 })
                 .then(data => {
-                    // Update the weather information on the web page with the HTML content
                     const weatherInfoDiv = document.getElementById('weatherInfo');
-                    weatherInfoDiv.innerHTML = data.html;
-
-                    // Update chart with new data
-                    const chartData = data.chartData.map(d => [d.date, d.temperature]);
-                    updateChart(chartData);
+                    if (data.existsInDb) {
+                        updateDropdownCity(city);
+                        weatherInfoDiv.innerHTML = data.html;
+                        const chartData = data.chartData.map(d => [d.date, d.temperature]);
+                        updateChart(chartData);
+                        document.getElementById('curve_chart').style.display = 'block';
+                    } else {
+                        weatherInfoDiv.innerHTML = '<p>City not exist</p>';
+                        document.getElementById('curve_chart').style.display = 'none';
+                        const citySelect = document.getElementById('citySelect');
+                        for(let i = 0; i < citySelect.options.length; i++) {
+                            if(citySelect.options[i].value === "select city") {
+                                citySelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching weather data:', error);
@@ -191,8 +215,18 @@
         });
 
         document.getElementById('citySelect').addEventListener('change', () => {
-            // When the selected city changes, trigger the click event on the button to fetch new weather data
+            const selectedCity = document.getElementById('citySelect').value;
+            if (selectedCity === "select city") {
+                return;
+            }
+            document.getElementById('cityInput').value = '';
             document.getElementById('getWeatherButton').click();
+        });
+
+        document.getElementById('cityInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.getElementById('cityInput').value) {
+                document.getElementById('getWeatherButton').click();
+            }
         });
     </script>
 </body>
