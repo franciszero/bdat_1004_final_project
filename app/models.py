@@ -7,7 +7,7 @@ import json
 class WeatherData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(64), index=True)
-    date = db.Column(db.String(64), index=True)
+    date = db.Column(db.Date, index=True)
     temperature = db.Column(db.Float)
 
     @property

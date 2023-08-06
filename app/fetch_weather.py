@@ -3,6 +3,7 @@ import json
 from app.models import WeatherData
 from app import db
 import time
+from datetime import datetime
 
 
 url = "https://weatherapi-com.p.rapidapi.com/current.json"
@@ -33,8 +34,8 @@ def fetch_weather(location):
     city = data['location']['name']
     temperature = data['current']['temp_c']
     a = data['location']['localtime']
-    b = time.strptime(a, '%Y-%m-%d %H:%M')
-    date = time.strftime('%Y-%m-%d', b)
+    date = datetime.strptime(a, '%Y-%m-%d %H:%M').date()
+    # date = time.strftime('%Y-%m-%d', b)
 
     # block duplicate data committing
     existing_record = WeatherData.query.filter_by(city=city, date=date)

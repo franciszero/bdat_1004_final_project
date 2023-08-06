@@ -1,0 +1,18 @@
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>City</th>
+            <th>Date</th>
+            <th>Temperature</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for weather in weather_data %}
+        <tr>
+            <td>{{ weather.city }}</td>
+            <td>{{ weather.date }}</td>
+            <td>{{ weather.temperature }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
