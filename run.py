@@ -19,9 +19,11 @@ with app.app_context():
 
     print(get_city_weather('Barrie'))
 
+
 def my_task():
     # Your task logic goes here
     print("Scheduled task executed at:", time.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 def run_scheduler():
     schedule.every(5).seconds.do(my_task)  # Fetch weather data every 10 minutes
@@ -30,10 +32,10 @@ def run_scheduler():
         schedule.run_pending()
         time.sleep(1)
 
+
 if __name__ == '__main__':
     # Start the scheduler in a separate thread
     scheduler_thread = Thread(target=run_scheduler)
     scheduler_thread.start()
 
     app.run(debug=True, host='0.0.0.0', port=5001)
-
