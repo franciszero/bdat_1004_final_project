@@ -1,6 +1,5 @@
 import os
 from urllib.parse import quote_plus
-import sqlalchemy
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 

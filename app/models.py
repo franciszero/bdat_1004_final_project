@@ -1,7 +1,6 @@
 from app import db
 from datetime import datetime, timedelta
 import random
-import json
 
 
 class WeatherData(db.Model):

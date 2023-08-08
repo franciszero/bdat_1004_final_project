@@ -4,32 +4,25 @@ from threading import Thread
 
 import schedule
 
-from app import create_app, db
+from app import create_app
 from app.fetch_weather import fetch_weather_for_all_locations
 from app.models import db, store_weather_data, get_city_weather
 
 app = create_app()
 
-is_debug = False
-
 with app.app_context():
     db.create_all()
 
-    store_weather_data()
-    fetch_weather_for_all_locations()
+    store_weather_data()  # generate random test data
+    fetch_weather_for_all_locations()  # fetch real world data from weather API
 
     print(get_city_weather('Barrie'))
 
 
-def my_task():
-    # Your task logic goes here
-    print("Scheduled task executed at:", time.strftime("%Y-%m-%d %H:%M:%S"))
-
-
 def run_scheduler(a_p_p):
     with a_p_p.app_context():
-        schedule.every(4).hours.do(fetch_weather_for_all_locations)  # Fetch weather data every 5 seconds for testing
-
+        print("Scheduled task fetch_weather_for_all_locations executed at:", time.strftime("%Y-%m-%d %H:%M:%S"))
+        schedule.every(4).hours.do(fetch_weather_for_all_locations)  # Fetch weather data regularly
         while True:
             schedule.run_pending()
             time.sleep(1)
