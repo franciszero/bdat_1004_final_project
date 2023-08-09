@@ -79,13 +79,13 @@
 <body>
     <header>
         <h1>Weather Report - Final Group Project 2</h1>
-    </header>
+    </header>  <!-- our website header -->
     <nav>
         <a href="#">Home</a>
         <a href="#">About</a>
         <a href="#">Contact</a>
-    </nav>
-    <main>
+    </nav>  <!-- the navigation bar -->
+    <main>  <!-- three div -->
         <div>
             <input type="text" id="cityInput" placeholder="Enter city name">
             <select id="citySelect">
@@ -95,15 +95,15 @@
             </select>
             <button id="getWeatherButton">Get Weather</button>
             <p>History weather for target city:</p>
-        </div>
-        <div id="curve_chart" style="width: 40%; height: 400px" class="mx-auto"></div>
+        </div>  <!-- the droplist and so on-->
+        <div id="curve_chart" style="width: 40%; height: 400px" class="mx-auto"></div>  <!-- the chart-->
         <div id="weatherInfo" style="width: 40%; margin: auto;">
             {% include 'weather_data.html' %}
-        </div>
+        </div>  <!-- the table form -->
     </main>
     <footer>
         <p>&copy; 2023 Weather. All rights reserved.</p>
-    </footer>
+    </footer>  <!-- the all right reserved footer-->
     <script>
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
@@ -179,7 +179,7 @@
             const city = cityInputValue ? cityInputValue : citySelectValue;
 
             // Fetch weather data from backend API
-            fetch(`/get_weather_data?city=${city}`)
+            fetch(`/get_weather_data?city=${city}`)  // call the </get_weather_data> route
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch weather data');
@@ -187,10 +187,10 @@
                     return response.json();
                 })
                 .then(data => {
-                    const weatherInfoDiv = document.getElementById('weatherInfo');
+                    const weatherInfoDiv = document.getElementById('weatherInfo');  // weather table div
                     if (data.existsInDb) {
-                        updateDropdownCity(city);
-                        weatherInfoDiv.innerHTML = data.html;
+                        updateDropdownCity(city);  // Update the dropdown to reflect the city.
+                        weatherInfoDiv.innerHTML = data.html;  // Ajax asynchronous json response
                         const chartData = data.chartData.map(d => [d.date, d.temperature]);
                         updateChart(chartData);
                         document.getElementById('curve_chart').style.display = 'block';
@@ -227,6 +227,6 @@
                 document.getElementById('getWeatherButton').click();
             }
         });
-    </script>
+    </script>  <!-- the script that displays page elements interactively with the backend-->
 </body>
 </html>
